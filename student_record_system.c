@@ -164,8 +164,16 @@ void editStudentInfo(Student* students, int count) {
         if (students[i].studentRollNumber == studentRollNumber) {
             printf("Enter new name: ");
             scanf("%s", students[i].name);
-            printf("Enter new marks: ");
-            scanf("%f", &students[i].marks);
+            
+            // Validate marks input
+            do {
+                printf("Enter new marks (0 - 100): ");
+                scanf("%f", &students[i].marks);
+                if (students[i].marks < 0 || students[i].marks > 100) {
+                    printf("Invalid mark. Please enter a mark between 0 and 100.\n");
+                }
+            } while (students[i].marks < 0 || students[i].marks > 100);
+
             printf("Student record updated successfully!\n");
             return;
         }
