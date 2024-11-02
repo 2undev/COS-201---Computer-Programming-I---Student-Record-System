@@ -87,7 +87,8 @@ void greetUser() {
     printf("Hello, %s!\n", name);
 }
 
-// Function to add a new student record with unique roll number check
+
+// Function to add a new student record with unique roll number check and marks validation
 void addStudent(Student* students, int* count) {
     if (*count >= MAX_NUMBER_OF_STUDENTS) {
         printf("Maximum student capacity reached.\n");
@@ -114,8 +115,14 @@ void addStudent(Student* students, int* count) {
         }
     } while (!is_unique);
 
-    printf("Enter marks: ");
-    scanf("%f", &new_student.marks);
+    // Validate marks input
+    do {
+        printf("Enter marks (0 - 100): ");
+        scanf("%f", &new_student.marks);
+        if (new_student.marks < 0 || new_student.marks > 100) {
+            printf("Invalid mark. Please enter a mark between 0 and 100.\n");
+        }
+    } while (new_student.marks < 0 || new_student.marks > 100);
 
     students[*count] = new_student;
     (*count)++;
