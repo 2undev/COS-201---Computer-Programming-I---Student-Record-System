@@ -162,17 +162,27 @@ void editStudentInfo(Student* students, int count) {
 
     for (int i = 0; i < count; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
-            printf("Enter new name: ");
-            scanf("%s", students[i].name);
-            
-            // Validate marks input
-            do {
-                printf("Enter new marks (0 - 100): ");
-                scanf("%f", &students[i].marks);
-                if (students[i].marks < 0 || students[i].marks > 100) {
-                    printf("Invalid mark. Please enter a mark between 0 and 100.\n");
-                }
-            } while (students[i].marks < 0 || students[i].marks > 100);
+            int choice;
+            printf("What would you like to edit?\n1. Name\n2. Marks\n3. Both\n");
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+
+            if (choice == 1 || choice == 3) {  // Edit name
+                printf("Enter new name: ");
+                scanf("%s", students[i].name);
+            }
+
+            if (choice == 2 || choice == 3) {  // Edit marks
+                float new_marks;
+                do {
+                    printf("Enter new marks (0 - 100): ");
+                    scanf("%f", &new_marks);
+                    if (new_marks < 0 || new_marks > 100) {
+                        printf("Marks must be between 0 and 100. Please try again.\n");
+                    }
+                } while (new_marks < 0 || new_marks > 100);
+                students[i].marks = new_marks;
+            }
 
             printf("Student record updated successfully!\n");
             return;
@@ -181,6 +191,7 @@ void editStudentInfo(Student* students, int count) {
 
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
+
 
 // Function to remove a student by roll number
 void deleteStudent(Student* students, int* count) {
