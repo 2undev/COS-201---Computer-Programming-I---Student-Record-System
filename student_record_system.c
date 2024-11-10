@@ -2,12 +2,18 @@
 
 #define MAX_NUMBER_OF_STUDENTS 100  // Define the maximum number of students
 
+
+
 // Define a structure for student information
 typedef struct {
     char name[50];
     int studentRollNumber;
     float marks;
 } Student;
+
+
+
+
 
 // Function prototypes
 void greetUser();
@@ -22,18 +28,26 @@ void searchStudent(Student* students, int count, int studentRollNumber);
 void sortStudents(Student* students, int count);
 float calculateAverageMark(Student* students, int count);
 
+
+
 int main() {
     greetUser();
 
     Student students[MAX_NUMBER_OF_STUDENTS];  // Array to store students
+
+
     int totalNumberOfStudent = 0;  // Keeps track of the number of students
 
-    int option;
+    int option; 
+
+
+
 
     do {
         printf("\n1. Add Student\n2. Display All Students\n3. Modify Student\n4. Remove Student\n5. Save Records\n6. Load Records\n7. Search by Roll Number\n8. Sort by Marks\n9. Calculate Average Marks\n10. Exit\n");
         printf("Choose an option from the list of options above:\n");
         scanf("%d", &option);
+        getchar();  // Consume the newline left by scanf
 
         switch(option) {
             case 1:
@@ -78,14 +92,22 @@ int main() {
     return 0;
 }
 
+
+
+
+
 // Function to greet the user
 void greetUser() {
     char name[50];
     printf("Welcome to the Student Record System!\n");
-    printf("Please enter your name: ");
-    scanf("%s", name);
-    printf("Hello, %s!\n", name);
+    printf("Please enter your full name: ");
+    // scanf("%s", name);
+    fgets(name, sizeof(name), stdin);
+    printf("Hello, %s\n", name);
 }
+
+
+
 
 
 // Function to add a new student record with unique roll number check and marks validation
@@ -96,10 +118,12 @@ void addStudent(Student* students, int* count) {
     }
 
     Student new_student;
-    printf("Enter student name: ");
-    scanf("%s", new_student.name);
+    printf("Enter student full name: ");
+    // scanf("%s", new_student.name);
+    fgets(new_student.name, sizeof(new_student), stdin);
 
     int is_unique;
+    
     do {
         is_unique = 1;  // Assume roll number is unique
         printf("Enter roll number: ");
@@ -115,6 +139,8 @@ void addStudent(Student* students, int* count) {
         }
     } while (!is_unique);
 
+
+
     // Validate marks input
     do {
         printf("Enter marks (0 - 100): ");
@@ -128,6 +154,9 @@ void addStudent(Student* students, int* count) {
     (*count)++;
     printf("Student added successfully!\n");
 }
+
+
+
 
 // Function to display all student records
 void display_all_students(Student* students, int count) {
@@ -145,6 +174,10 @@ void display_all_students(Student* students, int count) {
     }
 }
 
+
+
+
+
 // Function to check if a student has passed or failed
 void studentResultStatus(Student student) {
     if (student.marks >= 40) {
@@ -153,6 +186,10 @@ void studentResultStatus(Student student) {
         printf("Status: Failed\n");
     }
 }
+
+
+
+
 
 // Function to modify a student's record by roll number
 void editStudentInfo(Student* students, int count) {
@@ -193,6 +230,10 @@ void editStudentInfo(Student* students, int count) {
 }
 
 
+
+
+
+
 // Function to remove a student by roll number
 void deleteStudent(Student* students, int* count) {
     int studentRollNumber;
@@ -213,6 +254,10 @@ void deleteStudent(Student* students, int* count) {
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
 
+
+
+
+
 // Function to save student records to a file with formatted output
 void saveDataToFile(Student* students, int count) {
     FILE *file = fopen("student_records.txt", "w");
@@ -232,6 +277,11 @@ void saveDataToFile(Student* students, int count) {
     printf("Records saved to file successfully in the new format.\n");
 }
 
+
+
+
+
+
 // Function to load student records from a file
 void loadDataFromFile(Student* students, int* count) {
     FILE *file = fopen("student_records.txt", "r");
@@ -249,6 +299,11 @@ void loadDataFromFile(Student* students, int* count) {
     printf("Records loaded from file successfully.\n");
 }
 
+
+
+
+
+
 // Function to search for a student by roll number
 void searchStudent(Student* students, int count, int studentRollNumber) {
     for (int i = 0; i < count; i++) {
@@ -264,6 +319,10 @@ void searchStudent(Student* students, int count, int studentRollNumber) {
 
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
+
+
+
+
 
 // Function to sort students by marks in ascending or descending order
 void sortStudents(Student* students, int count) {
@@ -297,6 +356,10 @@ void sortStudents(Student* students, int count) {
         printf("Invalid option. Sorting not performed.\n");
     }
 }
+
+
+
+
 
 // Function to calculate the average marks
 float calculateAverageMark(Student* students, int count) {
