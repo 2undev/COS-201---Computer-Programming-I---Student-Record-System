@@ -90,6 +90,8 @@ int main() {
     return 0;
 }
 
+
+
 // Function to greet the user
 void greetUser() {
     char name[50];
@@ -98,6 +100,9 @@ void greetUser() {
     fgets(name, sizeof(name), stdin);
     printf("Hello, %s\n", name);
 }
+
+
+
 
 // Function to add a new student record
 void addStudent(Student** students, int* count, int* capacity) {
@@ -117,8 +122,14 @@ void addStudent(Student** students, int* count, int* capacity) {
     int is_unique;
     do {
         is_unique = 1;
-        printf("Enter roll number: ");
+        printf("Enter roll number (must be greater than 0): ");
         scanf("%d", &new_student.studentRollNumber);
+
+        if (new_student.studentRollNumber == 0) {
+            printf("Roll number cannot be 0. Please enter a valid roll number.\n");
+            is_unique = 0;
+            continue;
+        }
 
         for (int i = 0; i < *count; i++) {
             if ((*students)[i].studentRollNumber == new_student.studentRollNumber) {
@@ -142,6 +153,10 @@ void addStudent(Student** students, int* count, int* capacity) {
     printf("Student added successfully!\n");
 }
 
+
+
+
+
 // Function to display all student records
 void display_all_students(Student* students, int count) {
     if (count == 0) {
@@ -158,6 +173,9 @@ void display_all_students(Student* students, int count) {
     }
 }
 
+
+
+
 // Function to check if a student has passed or failed
 void studentResultStatus(Student student) {
     if (student.marks >= 40) {
@@ -166,6 +184,9 @@ void studentResultStatus(Student student) {
         printf("Status: Failed\n");
     }
 }
+
+
+
 
 // Function to modify a student's record by roll number
 void editStudentInfo(Student* students, int count) {
@@ -206,6 +227,9 @@ void editStudentInfo(Student* students, int count) {
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
 
+
+
+
 // Function to remove a student by roll number
 void deleteStudent(Student* students, int* count) {
     int studentRollNumber;
@@ -226,6 +250,10 @@ void deleteStudent(Student* students, int* count) {
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
 
+
+
+
+
 // Function to save student records to a file
 void saveDataToFile(Student* students, int count) {
     FILE *file = fopen("student_records.txt", "w");
@@ -244,6 +272,9 @@ void saveDataToFile(Student* students, int count) {
     fclose(file);
     printf("Records saved to file successfully.\n");
 }
+
+
+
 
 // Function to load student records from a file
 void loadDataFromFile(Student** students, int* count, int* capacity) {
@@ -280,6 +311,10 @@ void loadDataFromFile(Student** students, int* count, int* capacity) {
     printf("Records loaded from file successfully.\n");
 }
 
+
+
+
+
 // Function to search for a student by roll number
 void searchStudent(Student* students, int count, int studentRollNumber) {
     for (int i = 0; i < count; i++) {
@@ -295,6 +330,9 @@ void searchStudent(Student* students, int count, int studentRollNumber) {
     printf("Student with roll number %d not found.\n", studentRollNumber);
 }
 
+
+
+
 // Function to sort students by marks
 void sortStudents(Student* students, int count) {
     for (int i = 0; i < count - 1; i++) {
@@ -308,6 +346,9 @@ void sortStudents(Student* students, int count) {
     }
     printf("Students sorted by marks in descending order.\n");
 }
+
+
+
 
 // Function to calculate the average mark of all students
 float calculateAverageMark(Student* students, int count) {
