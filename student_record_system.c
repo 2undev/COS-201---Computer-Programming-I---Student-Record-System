@@ -230,7 +230,7 @@ void editStudentInfo(Student* students, int count) {
 
 
 
-// Function to remove a student by roll number
+// Function to remove a student by roll number with confirmation
 void deleteStudent(Student* students, int* count) {
     int studentRollNumber;
     printf("Enter roll number of student to remove: ");
@@ -238,11 +238,25 @@ void deleteStudent(Student* students, int* count) {
 
     for (int i = 0; i < *count; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
-            for (int j = i; j < *count - 1; j++) {
-                students[j] = students[j + 1];
+            printf("\nStudent to be deleted:\n");
+            printf("Name: %s", students[i].name);
+            printf("Roll Number: %d\n", students[i].studentRollNumber);
+            printf("Marks: %.2f\n", students[i].marks);
+
+            char confirm;
+            printf("Are you sure you want to delete this student? (y/n): ");
+            getchar();
+            scanf("%c", &confirm);
+
+            if (confirm == 'y' || confirm == 'Y') {
+                for (int j = i; j < *count - 1; j++) {
+                    students[j] = students[j + 1];
+                }
+                (*count)--;
+                printf("Student deleted successfully.\n");
+            } else {
+                printf("Operation cancelled. Student not deleted.\n");
             }
-            (*count)--;
-            printf("Student removed successfully!\n");
             return;
         }
     }
@@ -333,18 +347,38 @@ void searchStudent(Student* students, int count, int studentRollNumber) {
 
 
 
-// Function to sort students by marks
+// Function to sort students by marks with ascending/descending order option
 void sortStudents(Student* students, int count) {
+    if (count == 0) {
+        printf("No students to sort.\n");
+        return;
+    }
+
+    int choice;
+    printf("Sort by:\n1. Ascending Order\n2. Descending Order\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
     for (int i = 0; i < count - 1; i++) {
         for (int j = i + 1; j < count; j++) {
-            if (students[i].marks < students[j].marks) {
+            int shouldSwap = 0;
+
+            if (choice == 1 && students[i].marks > students[j].marks) {
+                shouldSwap = 1;
+            } else if (choice == 2 && students[i].marks < students[j].marks) {
+                shouldSwap = 1;
+            }
+
+            if (shouldSwap) {
                 Student temp = students[i];
                 students[i] = students[j];
                 students[j] = temp;
             }
         }
     }
-    printf("Students sorted by marks in descending order.\n");
+
+    printf("Students sorted successfully in %s order.\n",
+           (choice == 1) ? "ascending" : "descending");
 }
 
 
