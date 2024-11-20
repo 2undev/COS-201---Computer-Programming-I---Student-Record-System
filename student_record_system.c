@@ -107,7 +107,7 @@ void greetUser() {
 // Function to add a new student record
 void addStudent(Student** students, int* count, int* capacity) {
     if (*count >= *capacity) {
-        *capacity *= 2;  // Double the capacity
+        *capacity *= 2;// Double the capacity
         *students = realloc(*students, *capacity * sizeof(Student));
         if (*students == NULL) {
             printf("Memory reallocation failed.\n");
@@ -125,11 +125,12 @@ void addStudent(Student** students, int* count, int* capacity) {
         printf("Enter roll number (must be greater than 0): ");
         scanf("%d", &new_student.studentRollNumber);
 
-        if (new_student.studentRollNumber == 0) {
-            printf("Roll number cannot be 0. Please enter a valid roll number.\n");
+        if (new_student.studentRollNumber <= 0) {
+            printf("Roll number cannot be zero or negative. Please enter a valid roll number.\n");
             is_unique = 0;
             continue;
         }
+
 
         for (int i = 0; i < *count; i++) {
             if ((*students)[i].studentRollNumber == new_student.studentRollNumber) {
