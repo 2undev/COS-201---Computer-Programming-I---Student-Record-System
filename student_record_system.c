@@ -249,7 +249,7 @@ void deleteStudent(Student* students, int* totalNumberOfStudent) {
     for (int i = 0; i < *totalNumberOfStudent; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
             printf("\nStudent to be deleted:\n");
-            printf("Name: %s", students[i].name);
+            printf("Name: %s\n", students[i].name);
             printf("Roll Number: %d\n", students[i].studentRollNumber);
             printf("Marks: %.2f\n", students[i].marks);
 
