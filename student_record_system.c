@@ -339,7 +339,7 @@ void searchStudent(Student* students, int totalNumberOfStudent, int studentRollN
     for (int i = 0; i < totalNumberOfStudent; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
             printf("\nStudent found:\n");
-            printf("Name: %s", students[i].name);
+            printf("Name: %s\n", students[i].name);
             printf("Roll Number: %d\n", students[i].studentRollNumber);
             printf("Marks: %.2f\n", students[i].marks);
             studentResultStatus(students[i]);
@@ -357,17 +357,36 @@ void searchStudent(Student* students, int totalNumberOfStudent, int studentRollN
 
 // Function to sort students by their marks in descending order
 void sortStudents(Student* students, int totalNumberOfStudent) {
+    if (totalNumberOfStudent == 0) {
+        printf("No students to sort.\n");
+        return;
+    }
+
+    int choice;
+    printf("Sort by:\n1. Ascending Order\n2. Descending Order\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
     for (int i = 0; i < totalNumberOfStudent - 1; i++) {
-        for (int j = 0; j < totalNumberOfStudent - i - 1; j++) {
-            if (students[j].marks < students[j + 1].marks) {
-                Student temp = students[j];
-                students[j] = students[j + 1];
-                students[j + 1] = temp;
+        for (int j = i + 1; j < totalNumberOfStudent; j++) {
+            int shouldSwap = 0;
+
+            if (choice == 1 && students[i].marks > students[j].marks) {
+                shouldSwap = 1;
+            } else if (choice == 2 && students[i].marks < students[j].marks) {
+                shouldSwap = 1;
+            }
+
+            if (shouldSwap) {
+                Student temp = students[i];
+                students[i] = students[j];
+                students[j] = temp;
             }
         }
     }
 
-    printf("Students sorted by marks in descending order.\n");
+    printf("Students sorted successfully in %s order.\n",
+           (choice == 1) ? "ascending" : "descending");
 }
 
 
