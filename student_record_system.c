@@ -123,7 +123,11 @@ void addStudent(Student** students, int* totalNumberOfStudent, int* capacity) {
     printf("Enter student full name: ");
     fgets(new_student.name, sizeof(new_student.name), stdin);
 
-    
+    // Remove the trailing newline character from the name string
+    size_t length = strlen(new_student.name);
+    if (length > 0 && new_student.name[length - 1] == '\n') {
+        new_student.name[length - 1] = '\0';
+    }
 
     int is_unique;
     do {
