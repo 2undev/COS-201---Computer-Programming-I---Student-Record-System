@@ -11,16 +11,19 @@ typedef struct {
 
 // Function prototypes
 void greetUser();
-void addStudent(Student** students, int* count, int* capacity);
-void display_all_students(Student* students, int count);
-void editStudentInfo(Student* students, int count);
-void deleteStudent(Student* students, int* count);
+void addStudent(Student** students, int* totalNumberOfStudent, int* capacity);
+void display_all_students(Student* students, int totalNumberOfStudent);
+void editStudentInfo(Student* students, int totalNumberOfStudent);
+void deleteStudent(Student* students, int* totalNumberOfStudent);
 void studentResultStatus(Student student);
-void saveDataToFile(Student* students, int count);
-void loadDataFromFile(Student** students, int* count, int* capacity);
-void searchStudent(Student* students, int count, int studentRollNumber);
-void sortStudents(Student* students, int count);
-float calculateAverageMark(Student* students, int count);
+void saveDataToFile(Student* students, int totalNumberOfStudent);
+void loadDataFromFile(Student** students, int* totalNumberOfStudent, int* capacity);
+void searchStudent(Student* students, int totalNumberOfStudent, int studentRollNumber);
+void sortStudents(Student* students, int totalNumberOfStudent);
+float calculateAverageMark(Student* students, int totalNumberOfStudent);
+
+
+
 
 int main() {
     greetUser();
@@ -39,7 +42,6 @@ int main() {
 
     do {
         printf("\n1. Add Student\n2. Display All Students\n3. Modify Student\n4. Remove Student\n5. Save Records\n6. Load Records\n7. Search by Roll Number\n8. Sort by Marks\n9. Calculate Average Marks\n10. Exit\n");
-        
         printf("Choose an option from the list of options above:\n");
         scanf("%d", &option);
         getchar();  // Consume the newline left by scanf
@@ -92,6 +94,7 @@ int main() {
 
 
 
+
 // Function to greet the user
 void greetUser() {
     char name[50];
@@ -104,10 +107,11 @@ void greetUser() {
 
 
 
+
 // Function to add a new student record
-void addStudent(Student** students, int* count, int* capacity) {
-    if (*count >= *capacity) {
-        *capacity *= 2;// Double the capacity
+void addStudent(Student** students, int* totalNumberOfStudent, int* capacity) {
+    if (*totalNumberOfStudent >= *capacity) {
+        *capacity *= 2;  // Double the capacity
         *students = realloc(*students, *capacity * sizeof(Student));
         if (*students == NULL) {
             printf("Memory reallocation failed.\n");
@@ -118,6 +122,8 @@ void addStudent(Student** students, int* count, int* capacity) {
     Student new_student;
     printf("Enter student full name: ");
     fgets(new_student.name, sizeof(new_student.name), stdin);
+
+    
 
     int is_unique;
     do {
@@ -131,8 +137,7 @@ void addStudent(Student** students, int* count, int* capacity) {
             continue;
         }
 
-
-        for (int i = 0; i < *count; i++) {
+        for (int i = 0; i < *totalNumberOfStudent; i++) {
             if ((*students)[i].studentRollNumber == new_student.studentRollNumber) {
                 printf("Roll number %d is already taken. Please enter a different roll number.\n", new_student.studentRollNumber);
                 is_unique = 0;
@@ -149,8 +154,8 @@ void addStudent(Student** students, int* count, int* capacity) {
         }
     } while (new_student.marks < 0 || new_student.marks > 100);
 
-    (*students)[*count] = new_student;
-    (*count)++;
+    (*students)[*totalNumberOfStudent] = new_student;
+    (*totalNumberOfStudent)++;
     printf("Student added successfully!\n");
 }
 
@@ -159,13 +164,13 @@ void addStudent(Student** students, int* count, int* capacity) {
 
 
 // Function to display all student records
-void display_all_students(Student* students, int count) {
-    if (count == 0) {
+void display_all_students(Student* students, int totalNumberOfStudent) {
+    if (totalNumberOfStudent == 0) {
         printf("No students to display.\n");
         return;
     }
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < totalNumberOfStudent; i++) {
         printf("\nStudent %d:\n", i + 1);
         printf("Name: %s\n", students[i].name);
         printf("Roll Number: %d\n", students[i].studentRollNumber);
@@ -173,9 +178,6 @@ void display_all_students(Student* students, int count) {
         studentResultStatus(students[i]);
     }
 }
-
-
-
 
 // Function to check if a student has passed or failed
 void studentResultStatus(Student student) {
@@ -189,13 +191,15 @@ void studentResultStatus(Student student) {
 
 
 
+
+
 // Function to modify a student's record by roll number
-void editStudentInfo(Student* students, int count) {
+void editStudentInfo(Student* students, int totalNumberOfStudent) {
     int studentRollNumber;
     printf("Enter roll number of student to modify: ");
     scanf("%d", &studentRollNumber);
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < totalNumberOfStudent; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
             int choice;
             printf("What would you like to edit?\n1. Name\n2. Marks\n3. Both\n");
@@ -231,13 +235,14 @@ void editStudentInfo(Student* students, int count) {
 
 
 
+
 // Function to remove a student by roll number with confirmation
-void deleteStudent(Student* students, int* count) {
+void deleteStudent(Student* students, int* totalNumberOfStudent) {
     int studentRollNumber;
     printf("Enter roll number of student to remove: ");
     scanf("%d", &studentRollNumber);
 
-    for (int i = 0; i < *count; i++) {
+    for (int i = 0; i < *totalNumberOfStudent; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
             printf("\nStudent to be deleted:\n");
             printf("Name: %s", students[i].name);
@@ -250,10 +255,10 @@ void deleteStudent(Student* students, int* count) {
             scanf("%c", &confirm);
 
             if (confirm == 'y' || confirm == 'Y') {
-                for (int j = i; j < *count - 1; j++) {
+                for (int j = i; j < *totalNumberOfStudent - 1; j++) {
                     students[j] = students[j + 1];
                 }
-                (*count)--;
+                (*totalNumberOfStudent)--;
                 printf("Student deleted successfully.\n");
             } else {
                 printf("Operation cancelled. Student not deleted.\n");
@@ -269,61 +274,56 @@ void deleteStudent(Student* students, int* count) {
 
 
 
+
 // Function to save student records to a file
-void saveDataToFile(Student* students, int count) {
+void saveDataToFile(Student* students, int totalNumberOfStudent) {
     FILE *file = fopen("student_records.txt", "w");
     if (file == NULL) {
-        printf("Error opening file for writing.\n");
+        printf("Error opening file.\n");
         return;
     }
 
-    for (int i = 0; i < count; i++) {
-        fprintf(file, "Name: %s\n", students[i].name);
-        fprintf(file, "Roll number: %d\n", students[i].studentRollNumber);
-        fprintf(file, "Student mark: %.2f\n", students[i].marks);
-        fprintf(file, "Status: %s\n\n", (students[i].marks >= 40) ? "Pass" : "Fail");
+    for (int i = 0; i < totalNumberOfStudent; i++) {
+        fprintf(file, "%s,%d,%.2f\n", students[i].name, students[i].studentRollNumber, students[i].marks);
     }
 
     fclose(file);
-    printf("Records saved to file successfully.\n");
+    printf("Data saved successfully.\n");
 }
 
 
 
 
+
 // Function to load student records from a file
-void loadDataFromFile(Student** students, int* count, int* capacity) {
+void loadDataFromFile(Student** students, int* totalNumberOfStudent, int* capacity) {
     FILE *file = fopen("student_records.txt", "r");
     if (file == NULL) {
-        printf("Error opening file for reading.\n");
+        printf("Error opening file.\n");
         return;
     }
 
-    *count = 0;
-    char buffer[100];
-    while (fgets(buffer, sizeof(buffer), file)) {
-        if (*count >= *capacity) {
+    *totalNumberOfStudent = 0;
+    while (!feof(file)) {
+        if (*totalNumberOfStudent >= *capacity) {
             *capacity *= 2;
             *students = realloc(*students, *capacity * sizeof(Student));
             if (*students == NULL) {
                 printf("Memory reallocation failed.\n");
                 fclose(file);
-                return;
+                exit(1);
             }
         }
 
-        sscanf(buffer, "Name: %[^\n]\n", (*students)[*count].name);
-        fgets(buffer, sizeof(buffer), file);
-        sscanf(buffer, "Roll number: %d\n", &(*students)[*count].studentRollNumber);
-        fgets(buffer, sizeof(buffer), file);
-        sscanf(buffer, "Student mark: %f\n", &(*students)[*count].marks);
-        *count += 1;
-
-        fgets(buffer, sizeof(buffer), file);  // Skip the "Status" line
+        Student new_student;
+        if (fscanf(file, "%49[^,],%d,%f\n", new_student.name, &new_student.studentRollNumber, &new_student.marks) == 3) {
+            (*students)[*totalNumberOfStudent] = new_student;
+            (*totalNumberOfStudent)++;
+        }
     }
 
     fclose(file);
-    printf("Records loaded from file successfully.\n");
+    printf("Data loaded successfully.\n");
 }
 
 
@@ -331,10 +331,11 @@ void loadDataFromFile(Student** students, int* count, int* capacity) {
 
 
 // Function to search for a student by roll number
-void searchStudent(Student* students, int count, int studentRollNumber) {
-    for (int i = 0; i < count; i++) {
+void searchStudent(Student* students, int totalNumberOfStudent, int studentRollNumber) {
+    for (int i = 0; i < totalNumberOfStudent; i++) {
         if (students[i].studentRollNumber == studentRollNumber) {
-            printf("Name: %s\n", students[i].name);
+            printf("\nStudent found:\n");
+            printf("Name: %s", students[i].name);
             printf("Roll Number: %d\n", students[i].studentRollNumber);
             printf("Marks: %.2f\n", students[i].marks);
             studentResultStatus(students[i]);
@@ -348,54 +349,39 @@ void searchStudent(Student* students, int count, int studentRollNumber) {
 
 
 
-// Function to sort students by marks with ascending/descending order option
-void sortStudents(Student* students, int count) {
-    if (count == 0) {
-        printf("No students to sort.\n");
-        return;
-    }
 
-    int choice;
-    printf("Sort by:\n1. Ascending Order\n2. Descending Order\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
 
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = i + 1; j < count; j++) {
-            int shouldSwap = 0;
-
-            if (choice == 1 && students[i].marks > students[j].marks) {
-                shouldSwap = 1;
-            } else if (choice == 2 && students[i].marks < students[j].marks) {
-                shouldSwap = 1;
-            }
-
-            if (shouldSwap) {
-                Student temp = students[i];
-                students[i] = students[j];
-                students[j] = temp;
+// Function to sort students by their marks in descending order
+void sortStudents(Student* students, int totalNumberOfStudent) {
+    for (int i = 0; i < totalNumberOfStudent - 1; i++) {
+        for (int j = 0; j < totalNumberOfStudent - i - 1; j++) {
+            if (students[j].marks < students[j + 1].marks) {
+                Student temp = students[j];
+                students[j] = students[j + 1];
+                students[j + 1] = temp;
             }
         }
     }
 
-    printf("Students sorted successfully in %s order.\n",
-           (choice == 1) ? "ascending" : "descending");
+    printf("Students sorted by marks in descending order.\n");
 }
 
 
 
 
+
+
 // Function to calculate the average mark of all students
-float calculateAverageMark(Student* students, int count) {
-    if (count == 0) {
-        printf("No students to calculate average.\n");
+float calculateAverageMark(Student* students, int totalNumberOfStudent) {
+    if (totalNumberOfStudent == 0) {
+        printf("No students available for average calculation.\n");
         return 0.0;
     }
 
-    float total = 0.0;
-    for (int i = 0; i < count; i++) {
-        total += students[i].marks;
+    float totalMarks = 0;
+    for (int i = 0; i < totalNumberOfStudent; i++) {
+        totalMarks += students[i].marks;
     }
 
-    return total / count;
+    return totalMarks / totalNumberOfStudent;
 }
